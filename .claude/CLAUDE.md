@@ -12,10 +12,10 @@ KISS 원칙에 따라 코드와 문서를 작성한다.
 
 # 구현
 
-아키텍처 패턴은 Controller - (Query/Command)Usecase - Service/Repository/Entity 구조를 활용한다.
+아키텍처 패턴은 Controller - Usecase(Query/Command) - Service/Repository/Entity 구조를 활용한다.
 Usecase에 CQRS 패턴을 적용한다.
-- QueryUsecase는 특정 형식 없이 자유로운 조회를 허용한다.
-- CommandUsecase는 DDD 원칙을 준수한다. 풍부한 엔티티와 적극적인 값 객체를 사용한다.
+- UsecaseQuery는 특정 형식 없이 자유로운 조회를 허용한다.
+- UsecaseCommand는 DDD 원칙을 준수한다. 풍부한 엔티티와 적극적인 값 객체를 사용한다.
 한 객체가 컨트롤러(복잡한 의존성을 가짐)인 동시에 도메인모델(복잡한 도메인 로직을 가짐)이 되지 않게 경계한다.
 한 클래스 내부에서 성급한 메서드 공통화를 하지 않는다. 특히 한 줄짜리 본문을 가진 공통화 메서드는 가급적 피한다.
 runCatching은 Error까지 잡으므로 사용하지 않는다. 예외 처리는 try-catch로 필요한 예외만 잡는다.

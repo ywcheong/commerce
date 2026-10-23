@@ -45,6 +45,13 @@ check_last_tdd_order() {
   check_tdd_order "$prev" "$(head -n1 "$1")"
 }
 
+check_test_result() {
+  case $(head -n1 "$1") in
+    test:*) ! ./gradlew test -q || fail "test: 커밋의 테스트는 실패해야 한다" ;;
+    feat:*) ./gradlew test ;;
+  esac
+}
+
 check_history_tdd_order() {
   local prev="" cur
   while IFS= read -r cur; do
@@ -57,10 +64,11 @@ case "${1:-}" in
   pre-commit)
     gate format format_staged
     gate whitespace check_whitespace
-    gate gradle ./gradlew check
+    gate gradle ./gradlew check testClasses -x test
     ;;
   commit-msg)
     gate tdd-order check_last_tdd_order "${2:?메시지 파일 필요}"
+    gate test-result check_test_result "$2"
     ;;
   all)
     gate tdd-order check_history_tdd_order

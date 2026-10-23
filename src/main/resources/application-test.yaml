@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/commerce_test
+    username: commerce
+    password: commerce
+  data:
+    redis:
+      host: localhost
+      port: 6379

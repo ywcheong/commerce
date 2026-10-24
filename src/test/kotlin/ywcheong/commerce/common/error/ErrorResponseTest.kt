@@ -24,7 +24,7 @@ class ErrorResponseTest(
         val result =
             client
                 .get()
-                .uri("/api-public/test/unhandled-error")
+                .uri("/health/error/server")
                 .exchange()
                 .returnResult<String>()
 
@@ -37,7 +37,7 @@ class ErrorResponseTest(
                 "title" to "Internal Server Error",
                 "status" to 500,
                 "detail" to "서버 오류가 발생했습니다.",
-                "instance" to "/api-public/test/unhandled-error",
+                "instance" to "/health/error/server",
                 "code" to "INTERNAL_SERVER_ERROR",
             )
         body shouldNotContain INTERNAL_MESSAGE
@@ -97,6 +97,6 @@ class ErrorResponseTest(
     }
 
     companion object {
-        const val INTERNAL_MESSAGE = "내부 구현 정보"
+        const val INTERNAL_MESSAGE = "서버 오류 예시"
     }
 }

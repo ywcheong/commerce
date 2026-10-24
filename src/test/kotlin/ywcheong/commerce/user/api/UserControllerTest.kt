@@ -36,7 +36,8 @@ class UserControllerTest(
         val result = helper.findUser(userId, currentUserId = otherUserId)
 
         // then
-        result.status shouldBe HttpStatus.FORBIDDEN
+        result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
+        result.code shouldBe "USER_FORBIDDEN"
     }
 
     @Test
@@ -48,7 +49,8 @@ class UserControllerTest(
         val result = helper.findUser(userId)
 
         // then
-        result.status shouldBe HttpStatus.NOT_FOUND
+        result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
+        result.code shouldBe "USER_NOT_FOUND"
     }
 
     @Test
@@ -96,8 +98,8 @@ class UserControllerTest(
         val result = helper.deleteUser(userId)
 
         // then
-        result shouldBe HttpStatus.NO_CONTENT
-        helper.findUser(userId).status shouldBe HttpStatus.NOT_FOUND
+        result.status shouldBe HttpStatus.NO_CONTENT
+        helper.findUser(userId).code shouldBe "USER_NOT_FOUND"
     }
 
     @Test
@@ -110,7 +112,8 @@ class UserControllerTest(
         val result = helper.deleteUser(userId, currentUserId = otherUserId)
 
         // then
-        result shouldBe HttpStatus.FORBIDDEN
+        result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
+        result.code shouldBe "USER_FORBIDDEN"
         helper.findUser(userId).status shouldBe HttpStatus.OK
     }
 }

@@ -87,6 +87,7 @@ class UserControllerTest(
 
         // then
         result.status shouldBe HttpStatus.BAD_REQUEST
+        result.code shouldBe "BAD_REQUEST"
     }
 
     @Test

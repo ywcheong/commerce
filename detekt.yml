@@ -1,3 +1,6 @@
+naming:
+  MatchingDeclarationName:
+    excludes: ['**/*Exceptions.kt']
 style:
   FunctionOnlyReturningConstant:
     ignoreAnnotated: ['RestController']

@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.client.RestTestClient
 import org.springframework.test.web.servlet.client.returnResult
 import ywcheong.commerce.TestSetup
+import java.util.UUID
 
 @TestSetup
 class ErrorResponseTest(
@@ -40,6 +41,29 @@ class ErrorResponseTest(
                 "code" to "INTERNAL_SERVER_ERROR",
             )
         body shouldNotContain INTERNAL_MESSAGE
+    }
+
+    @Test
+    fun `인증 실패는 401 ProblemDetail로 응답한다`() {
+        // when
+        val result =
+            client
+                .get()
+                .uri("/api/users/{userId}", UUID.randomUUID())
+                .exchange()
+                .returnResult<String>()
+
+        // then
+        result.status.value() shouldBe 401
+        result.responseHeaders.contentType shouldBe MediaType.APPLICATION_PROBLEM_JSON
+        JsonPath.read<Map<String, Any?>>(result.responseBody, "\$") shouldBe
+            mapOf(
+                "title" to "Unauthorized",
+                "status" to 401,
+                "detail" to "인증이 필요합니다.",
+                "instance" to result.url.path,
+                "code" to "UNAUTHORIZED",
+            )
     }
 
     @Test

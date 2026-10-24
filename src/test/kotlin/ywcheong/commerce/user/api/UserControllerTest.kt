@@ -63,6 +63,7 @@ class UserControllerTest(
 
         // then
         result.status shouldBe HttpStatus.UNAUTHORIZED
+        result.code shouldBe "UNAUTHORIZED"
     }
 
     @Test
@@ -75,6 +76,7 @@ class UserControllerTest(
 
         // then
         result.status shouldBe HttpStatus.UNAUTHORIZED
+        result.code shouldBe "UNAUTHORIZED"
     }
 
     @Test

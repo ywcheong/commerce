@@ -3,3 +3,6 @@ spring:
     name: commerce
   jpa:
     open-in-view: false
+logging:
+  pattern:
+    correlation: "[%X{requestId:-}] "

@@ -33,7 +33,6 @@ class ErrorResponseTest(
         result.responseHeaders.contentType shouldBe MediaType.APPLICATION_PROBLEM_JSON
         JsonPath.read<Map<String, Any?>>(body, "\$") shouldBe
             mapOf(
-                "type" to "about:blank",
                 "title" to "Internal Server Error",
                 "status" to 500,
                 "detail" to "서버 오류가 발생했습니다.",

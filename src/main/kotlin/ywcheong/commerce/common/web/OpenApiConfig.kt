@@ -13,6 +13,7 @@ import ywcheong.commerce.buyer.domain.BuyerId
 import ywcheong.commerce.common.passport.CurrentIdentity
 import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver.Companion.IDENTITY_HEADER
 import ywcheong.commerce.identity.domain.IdentityId
+import ywcheong.commerce.order.domain.OrderId
 import ywcheong.commerce.seller.api.CurrentSeller
 import ywcheong.commerce.seller.domain.SellerId
 import ywcheong.commerce.shopitem.domain.ShopItemId
@@ -30,6 +31,7 @@ class OpenApiConfig {
             .replaceWithClass(BuyerId::class.java, UUID::class.java)
             .replaceWithClass(SellerId::class.java, UUID::class.java)
             .replaceWithClass(ShopItemId::class.java, UUID::class.java)
+            .replaceWithClass(OrderId::class.java, UUID::class.java)
     }
 
     @Bean

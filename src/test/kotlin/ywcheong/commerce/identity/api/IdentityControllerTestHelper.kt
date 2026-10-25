@@ -6,6 +6,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.client.RestTestClient
 import org.springframework.test.web.servlet.client.returnResult
 import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver.Companion.IDENTITY_HEADER
+import ywcheong.commerce.errorCode
 
 class IdentityControllerTestHelper(
     mockMvc: MockMvc,
@@ -52,9 +53,6 @@ class IdentityControllerTestHelper(
                 .returnResult<String>()
         return IdentityResult(result.status, null, errorCode(result.responseBody))
     }
-
-    private fun errorCode(body: String?): String? =
-        if (body.isNullOrBlank()) null else JsonPath.read<Map<String, Any?>>(body, "\$")["code"] as String?
 }
 
 data class IdentityResult(

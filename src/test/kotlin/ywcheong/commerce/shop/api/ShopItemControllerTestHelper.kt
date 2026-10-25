@@ -23,7 +23,7 @@ class ShopItemControllerTestHelper(
         val result =
             client
                 .post()
-                .uri("/shop-items")
+                .uri("/shops/items")
                 .headers { if (identityId != null) it.set(IDENTITY_HEADER, identityId) }
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(mapOf("name" to name, "price" to price, "stock" to stock))
@@ -43,7 +43,7 @@ class ShopItemControllerTestHelper(
         val result =
             client
                 .get()
-                .uri("/shop-items/{shopItemId}", shopItemId)
+                .uri("/shops/items/{shopItemId}", shopItemId)
                 .exchange()
                 .returnResult<String>()
         val shopItem: Map<String, Any?>? =
@@ -60,7 +60,7 @@ class ShopItemControllerTestHelper(
         val result =
             client
                 .get()
-                .uri("/shop-items")
+                .uri("/shops/items")
                 .exchange()
                 .returnResult<String>()
         check(result.status.value() == 200) { "상품 목록 조회 실패: ${result.status}" }

@@ -26,10 +26,12 @@ runCatching은 Error까지 잡으므로 사용하지 않는다. 예외 처리는
 
 모든 Entity의 Id는 UUIDv7 값을 가진 @Embeddable data class로 정의한다.
 
-API 경로 접두사로 접근권한을 관리한다.
-- /api: 사용자 식별 필수. 현재 사용자는 컨트롤러에서 `@CurrentIdentity identityId: IdentityId`로 주입받을 수 있다.
-- /api-public: 사용자 식별 불필요.
-- /internal: 외부 진입 차단
+API 접근권한은 컨트롤러 파라미터 어노테이션으로 관리한다. 어노테이션이 없으면 누구나 접근할 수 있다.
+- `@CurrentIdentity identityId: IdentityId`: 사용자 식별 필수
+- `@CurrentBuyer buyerId: BuyerId`: Buyer 등록 필수
+- `@CurrentSeller sellerId: SellerId`: Seller 등록 필수
+
+/internal 경로는 외부 진입이 차단된다.
 
 # 테스트
 

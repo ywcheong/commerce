@@ -1,27 +1,28 @@
 package ywcheong.commerce.order.domain
 
 import jakarta.persistence.AttributeOverride
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
+import jakarta.persistence.OrderBy
 import jakarta.persistence.Table
 import ywcheong.commerce.buyer.domain.BuyerId
 import ywcheong.commerce.common.domain.Money
-import ywcheong.commerce.common.domain.Quantity
-import ywcheong.commerce.shop.domain.ShopItemId
 
 @Entity
 @Table(name = "orders")
 class Order(
     id: OrderId,
     buyerId: BuyerId,
-    shopItemId: ShopItemId,
-    quantity: Quantity,
-    totalPrice: Money,
+    items: List<OrderItem>,
 ) {
     init {
-        if (quantity.value == 0) throw InvalidOrderQuantityException()
+        if (items.isEmpty()) throw EmptyOrderException()
+        if (items.distinctBy { it.shopItemId }.size != items.size) throw DuplicateOrderItemException()
     }
 
     @EmbeddedId
@@ -34,20 +35,13 @@ class Order(
     var buyerId: BuyerId = buyerId
         protected set
 
-    @Embedded
-    @AttributeOverride(name = "value", column = Column(name = "shop_item_id"))
-    var shopItemId: ShopItemId = shopItemId
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "order_id", nullable = false)
+    @OrderBy("id")
+    var items: List<OrderItem> = items
         protected set
 
-    @Embedded
-    @AttributeOverride(name = "value", column = Column(name = "quantity"))
-    var quantity: Quantity = quantity
-        protected set
-
-    @Embedded
-    @AttributeOverride(name = "value", column = Column(name = "total_price"))
-    var totalPrice: Money = totalPrice
-        protected set
+    fun totalPrice(): Money = items.map { it.price() }.reduce(Money::plus)
 
     fun isPlacedBy(buyerId: BuyerId): Boolean = this.buyerId == buyerId
 }

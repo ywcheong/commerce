@@ -19,9 +19,15 @@ class GetOrder(
         if (!order.isPlacedBy(command.buyerId)) throw OrderForbiddenException()
         return Result(
             orderId = order.id,
-            shopItemId = order.shopItemId,
-            quantity = order.quantity.value,
-            totalPrice = order.totalPrice.value,
+            totalPrice = order.totalPrice().value,
+            items =
+                order.items.map {
+                    Result.Item(
+                        shopItemId = it.shopItemId,
+                        quantity = it.quantity.value,
+                        unitPrice = it.unitPrice.value,
+                    )
+                },
         )
     }
 
@@ -32,8 +38,13 @@ class GetOrder(
 
     data class Result(
         val orderId: OrderId,
-        val shopItemId: ShopItemId,
-        val quantity: Int,
         val totalPrice: Long,
-    )
+        val items: List<Item>,
+    ) {
+        data class Item(
+            val shopItemId: ShopItemId,
+            val quantity: Int,
+            val unitPrice: Long,
+        )
+    }
 }

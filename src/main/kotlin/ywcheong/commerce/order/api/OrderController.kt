@@ -30,8 +30,13 @@ class OrderController(
         val placeCommand =
             PlaceOrder.Command(
                 buyerId = buyerId,
-                shopItemId = ShopItemId(request.shopItemId),
-                quantity = Quantity(request.quantity),
+                items =
+                    request.items.map {
+                        PlaceOrder.Command.Item(
+                            shopItemId = ShopItemId(it.shopItemId),
+                            quantity = Quantity(it.quantity),
+                        )
+                    },
             )
         val placeResult = placeOrder.execute(placeCommand)
         return PlaceOrderResponse(orderId = placeResult.orderId.value)
@@ -50,16 +55,26 @@ class OrderController(
         val getResult = getOrder.execute(getCommand)
         return OrderResponse(
             orderId = getResult.orderId.value,
-            shopItemId = getResult.shopItemId.value,
-            quantity = getResult.quantity,
             totalPrice = getResult.totalPrice,
+            items =
+                getResult.items.map {
+                    OrderResponse.Item(
+                        shopItemId = it.shopItemId.value,
+                        quantity = it.quantity,
+                        unitPrice = it.unitPrice,
+                    )
+                },
         )
     }
 
     data class PlaceOrderRequest(
-        val shopItemId: UUID,
-        val quantity: Int,
-    )
+        val items: List<Item>,
+    ) {
+        data class Item(
+            val shopItemId: UUID,
+            val quantity: Int,
+        )
+    }
 
     data class PlaceOrderResponse(
         val orderId: UUID,
@@ -67,8 +82,13 @@ class OrderController(
 
     data class OrderResponse(
         val orderId: UUID,
-        val shopItemId: UUID,
-        val quantity: Int,
         val totalPrice: Long,
-    )
+        val items: List<Item>,
+    ) {
+        data class Item(
+            val shopItemId: UUID,
+            val quantity: Int,
+            val unitPrice: Long,
+        )
+    }
 }

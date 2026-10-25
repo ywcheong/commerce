@@ -11,6 +11,8 @@ data class Money(
         if (value < 0) throw InvalidMoneyException()
     }
 
+    operator fun plus(other: Money): Money = Money(Math.addExact(value, other.value))
+
     operator fun times(quantity: Quantity): Money = Money(Math.multiplyExact(value, quantity.value.toLong()))
 }
 

@@ -19,7 +19,8 @@ class PlaceOrder(
 ) {
     fun execute(command: Command): Result {
         val shopItem = shopItemRepository.findByIdOrNull(command.shopItemId) ?: throw ShopItemNotFoundException()
-        val order = Order.place(command.buyerId, shopItem, command.quantity)
+        val order = Order(OrderId.generate(), command.buyerId, shopItem.id, command.quantity, shopItem.price * command.quantity)
+        shopItem.decreaseStock(command.quantity)
         return Result(orderRepository.save(order).id)
     }
 

@@ -9,7 +9,6 @@ import jakarta.persistence.Table
 import ywcheong.commerce.buyer.domain.BuyerId
 import ywcheong.commerce.common.domain.Money
 import ywcheong.commerce.common.domain.Quantity
-import ywcheong.commerce.shopitem.domain.ShopItem
 import ywcheong.commerce.shopitem.domain.ShopItemId
 
 @Entity
@@ -21,6 +20,10 @@ class Order(
     quantity: Quantity,
     totalPrice: Money,
 ) {
+    init {
+        if (quantity.value == 0) throw InvalidOrderQuantityException()
+    }
+
     @EmbeddedId
     @AttributeOverride(name = "value", column = Column(name = "id"))
     var id: OrderId = id
@@ -47,16 +50,4 @@ class Order(
         protected set
 
     fun isPlacedBy(buyerId: BuyerId): Boolean = this.buyerId == buyerId
-
-    companion object {
-        fun place(
-            buyerId: BuyerId,
-            shopItem: ShopItem,
-            quantity: Quantity,
-        ): Order {
-            if (quantity.value == 0) throw InvalidOrderQuantityException()
-            shopItem.decreaseStock(quantity)
-            return Order(OrderId.generate(), buyerId, shopItem.id, quantity, shopItem.price * quantity)
-        }
-    }
 }

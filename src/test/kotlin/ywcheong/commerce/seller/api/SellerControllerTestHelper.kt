@@ -21,7 +21,11 @@ class SellerControllerTestHelper(
                 .headers { if (identityId != null) it.set(IDENTITY_HEADER, identityId) }
                 .exchange()
                 .returnResult<String>()
-        return SellerResult(result.status, sellerId(result.status, result.responseBody), errorCode(result.responseBody))
+        return SellerResult(
+            status = result.status,
+            sellerId = sellerId(status = result.status, body = result.responseBody),
+            code = errorCode(result.responseBody),
+        )
     }
 
     fun findMySeller(identityId: String?): SellerResult {
@@ -32,7 +36,11 @@ class SellerControllerTestHelper(
                 .headers { if (identityId != null) it.set(IDENTITY_HEADER, identityId) }
                 .exchange()
                 .returnResult<String>()
-        return SellerResult(result.status, sellerId(result.status, result.responseBody), errorCode(result.responseBody))
+        return SellerResult(
+            status = result.status,
+            sellerId = sellerId(status = result.status, body = result.responseBody),
+            code = errorCode(result.responseBody),
+        )
     }
 
     private fun sellerId(

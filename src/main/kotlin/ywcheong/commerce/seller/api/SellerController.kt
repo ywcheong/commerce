@@ -21,14 +21,22 @@ class SellerController(
     @ResponseStatus(HttpStatus.CREATED)
     fun registerSeller(
         @CurrentIdentity identityId: IdentityId,
-    ): RegisterSellerResponse = RegisterSellerResponse(registerSeller.execute(RegisterSeller.Command(identityId)).sellerId.value)
+    ): RegisterSellerResponse {
+        val registerCommand = RegisterSeller.Command(identityId = identityId)
+        val registerResult = registerSeller.execute(registerCommand)
+        return RegisterSellerResponse(sellerId = registerResult.sellerId.value)
+    }
 
     @GetMapping("/sellers/me")
     fun getMySeller(
         @CurrentSeller sellerId: SellerId,
     ): SellerResponse {
-        val result = getSeller.execute(GetSeller.Command.BySellerId(sellerId))
-        return SellerResponse(result.sellerId.value, result.identityId.value)
+        val getCommand = GetSeller.Command.BySellerId(sellerId = sellerId)
+        val getResult = getSeller.execute(getCommand)
+        return SellerResponse(
+            sellerId = getResult.sellerId.value,
+            identityId = getResult.identityId.value,
+        )
     }
 
     data class RegisterSellerResponse(

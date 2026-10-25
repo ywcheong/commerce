@@ -18,7 +18,10 @@ class GetBuyer(
                 is Command.ByBuyerId -> buyerRepository.findByIdOrNull(command.buyerId)
                 is Command.ByIdentityId -> buyerRepository.findByIdentityId(command.identityId)
             } ?: throw BuyerNotFoundException()
-        return Result(buyer.id, buyer.identityId)
+        return Result(
+            buyerId = buyer.id,
+            identityId = buyer.identityId,
+        )
     }
 
     sealed interface Command {

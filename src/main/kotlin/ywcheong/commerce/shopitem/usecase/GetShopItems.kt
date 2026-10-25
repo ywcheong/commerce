@@ -14,7 +14,13 @@ class GetShopItems(
     fun execute(): Result =
         Result(
             shopItemRepository.findAll().map {
-                Result.Item(it.id, it.sellerId, it.name.value, it.price.value, it.stock.value)
+                Result.Item(
+                    shopItemId = it.id,
+                    sellerId = it.sellerId,
+                    name = it.name.value,
+                    price = it.price.value,
+                    stock = it.stock.value,
+                )
             },
         )
 

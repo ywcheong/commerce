@@ -21,7 +21,11 @@ class BuyerControllerTestHelper(
                 .headers { if (identityId != null) it.set(IDENTITY_HEADER, identityId) }
                 .exchange()
                 .returnResult<String>()
-        return BuyerResult(result.status, buyerId(result.status, result.responseBody), errorCode(result.responseBody))
+        return BuyerResult(
+            status = result.status,
+            buyerId = buyerId(status = result.status, body = result.responseBody),
+            code = errorCode(result.responseBody),
+        )
     }
 
     fun findMyBuyer(identityId: String?): BuyerResult {
@@ -32,7 +36,11 @@ class BuyerControllerTestHelper(
                 .headers { if (identityId != null) it.set(IDENTITY_HEADER, identityId) }
                 .exchange()
                 .returnResult<String>()
-        return BuyerResult(result.status, buyerId(result.status, result.responseBody), errorCode(result.responseBody))
+        return BuyerResult(
+            status = result.status,
+            buyerId = buyerId(status = result.status, body = result.responseBody),
+            code = errorCode(result.responseBody),
+        )
     }
 
     private fun buyerId(

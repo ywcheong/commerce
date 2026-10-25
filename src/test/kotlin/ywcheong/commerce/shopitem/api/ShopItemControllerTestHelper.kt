@@ -31,7 +31,12 @@ class ShopItemControllerTestHelper(
                 .returnResult<String>()
         val shopItemId: String? =
             if (result.status.is2xxSuccessful) JsonPath.read(result.responseBody, "\$.shopItemId") else null
-        return ShopItemResult(result.status, shopItemId, null, errorCode(result.responseBody))
+        return ShopItemResult(
+            status = result.status,
+            shopItemId = shopItemId,
+            body = null,
+            code = errorCode(result.responseBody),
+        )
     }
 
     fun findShopItem(shopItemId: String): ShopItemResult {
@@ -43,7 +48,12 @@ class ShopItemControllerTestHelper(
                 .returnResult<String>()
         val shopItem: Map<String, Any?>? =
             if (result.status.is2xxSuccessful) JsonPath.read(result.responseBody, "\$") else null
-        return ShopItemResult(result.status, shopItem?.get("shopItemId") as String?, shopItem, errorCode(result.responseBody))
+        return ShopItemResult(
+            status = result.status,
+            shopItemId = shopItem?.get("shopItemId") as String?,
+            body = shopItem,
+            code = errorCode(result.responseBody),
+        )
     }
 
     fun findShopItemIds(): List<String> {

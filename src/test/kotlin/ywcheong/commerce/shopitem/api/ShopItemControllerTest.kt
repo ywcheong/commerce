@@ -29,7 +29,7 @@ class ShopItemControllerTest(
         val (identityId, sellerId) = createSeller()
 
         // when
-        val shopItemId = helper.registerShopItem(identityId, name = "키보드", price = 30_000, stock = 5).shopItemId!!
+        val shopItemId = helper.registerShopItem(identityId = identityId, name = "키보드", price = 30_000, stock = 5).shopItemId!!
 
         // then
         val result = helper.findShopItem(shopItemId)
@@ -75,7 +75,7 @@ class ShopItemControllerTest(
         val (identityId, _) = createSeller()
 
         // when
-        val result = helper.registerShopItem(identityId, name = " ")
+        val result = helper.registerShopItem(identityId = identityId, name = " ")
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -88,7 +88,7 @@ class ShopItemControllerTest(
         val (identityId, _) = createSeller()
 
         // when
-        val result = helper.registerShopItem(identityId, price = -1)
+        val result = helper.registerShopItem(identityId = identityId, price = -1)
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -101,7 +101,7 @@ class ShopItemControllerTest(
         val (identityId, _) = createSeller()
 
         // when
-        val result = helper.registerShopItem(identityId, stock = -1)
+        val result = helper.registerShopItem(identityId = identityId, stock = -1)
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT

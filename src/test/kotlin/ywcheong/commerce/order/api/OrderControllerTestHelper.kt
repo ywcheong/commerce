@@ -29,7 +29,12 @@ class OrderControllerTestHelper(
                 .exchange()
                 .returnResult<String>()
         val orderId: String? = if (result.status.is2xxSuccessful) JsonPath.read(result.responseBody, "\$.orderId") else null
-        return OrderResult(result.status, orderId, null, errorCode(result.responseBody))
+        return OrderResult(
+            status = result.status,
+            orderId = orderId,
+            body = null,
+            code = errorCode(result.responseBody),
+        )
     }
 
     fun findOrder(
@@ -44,7 +49,12 @@ class OrderControllerTestHelper(
                 .exchange()
                 .returnResult<String>()
         val order: Map<String, Any?>? = if (result.status.is2xxSuccessful) JsonPath.read(result.responseBody, "\$") else null
-        return OrderResult(result.status, order?.get("orderId") as String?, order, errorCode(result.responseBody))
+        return OrderResult(
+            status = result.status,
+            orderId = order?.get("orderId") as String?,
+            body = order,
+            code = errorCode(result.responseBody),
+        )
     }
 }
 

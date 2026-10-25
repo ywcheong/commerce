@@ -33,7 +33,7 @@ class IdentityControllerTest(
         val otherIdentityId = helper.createIdentity()
 
         // when
-        val result = helper.findIdentity(identityId, currentIdentityId = otherIdentityId)
+        val result = helper.findIdentity(identityId = identityId, currentIdentityId = otherIdentityId)
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -59,7 +59,7 @@ class IdentityControllerTest(
         val identityId = helper.createIdentity()
 
         // when
-        val result = helper.findIdentity(identityId, currentIdentityId = null)
+        val result = helper.findIdentity(identityId = identityId, currentIdentityId = null)
 
         // then
         result.status shouldBe HttpStatus.UNAUTHORIZED
@@ -72,7 +72,7 @@ class IdentityControllerTest(
         val identityId = helper.createIdentity()
 
         // when
-        val result = helper.findIdentity(identityId, currentIdentityId = "not-uuid")
+        val result = helper.findIdentity(identityId = identityId, currentIdentityId = "not-uuid")
 
         // then
         result.status shouldBe HttpStatus.UNAUTHORIZED
@@ -85,7 +85,7 @@ class IdentityControllerTest(
         val identityId = helper.createIdentity()
 
         // when
-        val result = helper.findIdentity("not-uuid", currentIdentityId = identityId)
+        val result = helper.findIdentity(identityId = "not-uuid", currentIdentityId = identityId)
 
         // then
         result.status shouldBe HttpStatus.BAD_REQUEST
@@ -112,7 +112,7 @@ class IdentityControllerTest(
         val otherIdentityId = helper.createIdentity()
 
         // when
-        val result = helper.deleteIdentity(identityId, currentIdentityId = otherIdentityId)
+        val result = helper.deleteIdentity(identityId = identityId, currentIdentityId = otherIdentityId)
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT

@@ -27,8 +27,14 @@ class OrderController(
         @CurrentBuyer buyerId: BuyerId,
         @RequestBody request: PlaceOrderRequest,
     ): PlaceOrderResponse {
-        val command = PlaceOrder.Command(buyerId, ShopItemId(request.shopItemId), Quantity(request.quantity))
-        return PlaceOrderResponse(placeOrder.execute(command).orderId.value)
+        val placeCommand =
+            PlaceOrder.Command(
+                buyerId = buyerId,
+                shopItemId = ShopItemId(request.shopItemId),
+                quantity = Quantity(request.quantity),
+            )
+        val placeResult = placeOrder.execute(placeCommand)
+        return PlaceOrderResponse(orderId = placeResult.orderId.value)
     }
 
     @GetMapping("/orders/{orderId}")
@@ -36,8 +42,18 @@ class OrderController(
         @CurrentBuyer buyerId: BuyerId,
         @PathVariable orderId: OrderId,
     ): OrderResponse {
-        val result = getOrder.execute(GetOrder.Command(buyerId, orderId))
-        return OrderResponse(result.orderId.value, result.shopItemId.value, result.quantity, result.totalPrice)
+        val getCommand =
+            GetOrder.Command(
+                buyerId = buyerId,
+                orderId = orderId,
+            )
+        val getResult = getOrder.execute(getCommand)
+        return OrderResponse(
+            orderId = getResult.orderId.value,
+            shopItemId = getResult.shopItemId.value,
+            quantity = getResult.quantity,
+            totalPrice = getResult.totalPrice,
+        )
     }
 
     data class PlaceOrderRequest(

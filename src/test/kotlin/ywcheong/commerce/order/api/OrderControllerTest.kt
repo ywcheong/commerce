@@ -27,7 +27,7 @@ class OrderControllerTest(
     ): String {
         val identityId = identityHelper.createIdentity()
         sellerHelper.registerSeller(identityId)
-        return shopItemHelper.registerShopItem(identityId, price = price, stock = stock).shopItemId!!
+        return shopItemHelper.registerShopItem(identityId = identityId, price = price, stock = stock).shopItemId!!
     }
 
     private fun createBuyer(): String {
@@ -43,10 +43,10 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        val orderId = helper.placeOrder(buyer, shopItemId, quantity = 2).orderId!!
+        val orderId = helper.placeOrder(identityId = buyer, shopItemId = shopItemId, quantity = 2).orderId!!
 
         // then
-        val result = helper.findOrder(buyer, orderId)
+        val result = helper.findOrder(identityId = buyer, orderId = orderId)
         result.status shouldBe HttpStatus.OK
         result.body shouldBe
             mapOf(
@@ -64,7 +64,7 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        helper.placeOrder(buyer, shopItemId, quantity = 3)
+        helper.placeOrder(identityId = buyer, shopItemId = shopItemId, quantity = 3)
 
         // then
         shopItemHelper.findShopItem(shopItemId).body!!["stock"] shouldBe 7
@@ -77,7 +77,7 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        val result = helper.placeOrder(buyer, shopItemId, quantity = 2)
+        val result = helper.placeOrder(identityId = buyer, shopItemId = shopItemId, quantity = 2)
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -92,7 +92,7 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        val result = helper.placeOrder(buyer, shopItemId, quantity = 0)
+        val result = helper.placeOrder(identityId = buyer, shopItemId = shopItemId, quantity = 0)
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -105,7 +105,7 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        val result = helper.placeOrder(buyer, UUID.randomUUID().toString(), quantity = 1)
+        val result = helper.placeOrder(identityId = buyer, shopItemId = UUID.randomUUID().toString(), quantity = 1)
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -119,7 +119,7 @@ class OrderControllerTest(
         val identityId = identityHelper.createIdentity()
 
         // when
-        val result = helper.placeOrder(identityId, shopItemId, quantity = 1)
+        val result = helper.placeOrder(identityId = identityId, shopItemId = shopItemId, quantity = 1)
 
         // then
         result.status shouldBe HttpStatus.FORBIDDEN
@@ -130,11 +130,11 @@ class OrderControllerTest(
     fun `다른 구매자의 주문은 조회할 수 없다`() {
         // given
         val shopItemId = createShopItem()
-        val orderId = helper.placeOrder(createBuyer(), shopItemId, quantity = 1).orderId!!
+        val orderId = helper.placeOrder(identityId = createBuyer(), shopItemId = shopItemId, quantity = 1).orderId!!
         val otherBuyer = createBuyer()
 
         // when
-        val result = helper.findOrder(otherBuyer, orderId)
+        val result = helper.findOrder(identityId = otherBuyer, orderId = orderId)
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -147,7 +147,7 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        val result = helper.findOrder(buyer, UUID.randomUUID().toString())
+        val result = helper.findOrder(identityId = buyer, orderId = UUID.randomUUID().toString())
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT

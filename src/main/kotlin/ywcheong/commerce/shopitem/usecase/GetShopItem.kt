@@ -14,7 +14,13 @@ class GetShopItem(
 ) {
     fun execute(command: Command): Result {
         val shopItem = shopItemRepository.findByIdOrNull(command.shopItemId) ?: throw ShopItemNotFoundException()
-        return Result(shopItem.id, shopItem.sellerId, shopItem.name.value, shopItem.price.value, shopItem.stock.value)
+        return Result(
+            shopItemId = shopItem.id,
+            sellerId = shopItem.sellerId,
+            name = shopItem.name.value,
+            price = shopItem.price.value,
+            stock = shopItem.stock.value,
+        )
     }
 
     data class Command(

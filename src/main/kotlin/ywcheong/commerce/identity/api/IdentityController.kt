@@ -22,15 +22,23 @@ class IdentityController(
 ) {
     @PostMapping("/identities")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createIdentity(): IdentityResponse = IdentityResponse(createIdentity.execute().identityId.value)
+    fun createIdentity(): IdentityResponse {
+        val createResult = createIdentity.execute()
+        return IdentityResponse(identityId = createResult.identityId.value)
+    }
 
     @GetMapping("/identities/{identityId}")
     fun getIdentity(
         @CurrentIdentity currentIdentityId: IdentityId,
         @PathVariable identityId: IdentityId,
     ): IdentityResponse {
-        val result = getIdentity.execute(GetIdentity.Command(currentIdentityId, identityId))
-        return IdentityResponse(result.identityId.value)
+        val getCommand =
+            GetIdentity.Command(
+                currentIdentityId = currentIdentityId,
+                identityId = identityId,
+            )
+        val getResult = getIdentity.execute(getCommand)
+        return IdentityResponse(identityId = getResult.identityId.value)
     }
 
     @DeleteMapping("/identities/{identityId}")
@@ -39,7 +47,12 @@ class IdentityController(
         @CurrentIdentity currentIdentityId: IdentityId,
         @PathVariable identityId: IdentityId,
     ) {
-        deleteIdentity.execute(DeleteIdentity.Command(currentIdentityId, identityId))
+        val deleteCommand =
+            DeleteIdentity.Command(
+                currentIdentityId = currentIdentityId,
+                identityId = identityId,
+            )
+        deleteIdentity.execute(deleteCommand)
     }
 
     data class IdentityResponse(

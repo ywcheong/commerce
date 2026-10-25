@@ -30,23 +30,44 @@ class ShopItemController(
         @CurrentSeller sellerId: SellerId,
         @RequestBody request: RegisterShopItemRequest,
     ): RegisterShopItemResponse {
-        val command =
-            RegisterShopItem.Command(sellerId, ShopItemName(request.name), Money(request.price), Quantity(request.stock))
-        return RegisterShopItemResponse(registerShopItem.execute(command).shopItemId.value)
+        val registerCommand =
+            RegisterShopItem.Command(
+                sellerId = sellerId,
+                name = ShopItemName(request.name),
+                price = Money(request.price),
+                stock = Quantity(request.stock),
+            )
+        val registerResult = registerShopItem.execute(registerCommand)
+        return RegisterShopItemResponse(shopItemId = registerResult.shopItemId.value)
     }
 
     @GetMapping("/shop-items")
-    fun getShopItems(): List<ShopItemResponse> =
-        getShopItems.execute().items.map {
-            ShopItemResponse(it.shopItemId.value, it.sellerId.value, it.name, it.price, it.stock)
+    fun getShopItems(): List<ShopItemResponse> {
+        val getResult = getShopItems.execute()
+        return getResult.items.map {
+            ShopItemResponse(
+                shopItemId = it.shopItemId.value,
+                sellerId = it.sellerId.value,
+                name = it.name,
+                price = it.price,
+                stock = it.stock,
+            )
         }
+    }
 
     @GetMapping("/shop-items/{shopItemId}")
     fun getShopItem(
         @PathVariable shopItemId: ShopItemId,
     ): ShopItemResponse {
-        val result = getShopItem.execute(GetShopItem.Command(shopItemId))
-        return ShopItemResponse(result.shopItemId.value, result.sellerId.value, result.name, result.price, result.stock)
+        val getCommand = GetShopItem.Command(shopItemId = shopItemId)
+        val getResult = getShopItem.execute(getCommand)
+        return ShopItemResponse(
+            shopItemId = getResult.shopItemId.value,
+            sellerId = getResult.sellerId.value,
+            name = getResult.name,
+            price = getResult.price,
+            stock = getResult.stock,
+        )
     }
 
     data class RegisterShopItemRequest(

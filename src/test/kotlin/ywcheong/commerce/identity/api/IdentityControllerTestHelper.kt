@@ -37,7 +37,11 @@ class IdentityControllerTestHelper(
                 .returnResult<String>()
         val foundIdentityId: String? =
             if (result.status.is2xxSuccessful) JsonPath.read(result.responseBody, "\$.identityId") else null
-        return IdentityResult(result.status, foundIdentityId, errorCode(result.responseBody))
+        return IdentityResult(
+            status = result.status,
+            identityId = foundIdentityId,
+            code = errorCode(result.responseBody),
+        )
     }
 
     fun deleteIdentity(
@@ -51,7 +55,11 @@ class IdentityControllerTestHelper(
                 .headers { if (currentIdentityId != null) it.set(IDENTITY_HEADER, currentIdentityId) }
                 .exchange()
                 .returnResult<String>()
-        return IdentityResult(result.status, null, errorCode(result.responseBody))
+        return IdentityResult(
+            status = result.status,
+            identityId = null,
+            code = errorCode(result.responseBody),
+        )
     }
 }
 

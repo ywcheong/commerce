@@ -21,14 +21,22 @@ class BuyerController(
     @ResponseStatus(HttpStatus.CREATED)
     fun registerBuyer(
         @CurrentIdentity identityId: IdentityId,
-    ): RegisterBuyerResponse = RegisterBuyerResponse(registerBuyer.execute(RegisterBuyer.Command(identityId)).buyerId.value)
+    ): RegisterBuyerResponse {
+        val registerCommand = RegisterBuyer.Command(identityId = identityId)
+        val registerResult = registerBuyer.execute(registerCommand)
+        return RegisterBuyerResponse(buyerId = registerResult.buyerId.value)
+    }
 
     @GetMapping("/buyers/me")
     fun getMyBuyer(
         @CurrentBuyer buyerId: BuyerId,
     ): BuyerResponse {
-        val result = getBuyer.execute(GetBuyer.Command.ByBuyerId(buyerId))
-        return BuyerResponse(result.buyerId.value, result.identityId.value)
+        val getCommand = GetBuyer.Command.ByBuyerId(buyerId = buyerId)
+        val getResult = getBuyer.execute(getCommand)
+        return BuyerResponse(
+            buyerId = getResult.buyerId.value,
+            identityId = getResult.identityId.value,
+        )
     }
 
     data class RegisterBuyerResponse(

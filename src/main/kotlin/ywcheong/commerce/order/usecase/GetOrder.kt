@@ -17,7 +17,12 @@ class GetOrder(
     fun execute(command: Command): Result {
         val order = orderRepository.findByIdOrNull(command.orderId) ?: throw OrderNotFoundException()
         if (!order.isPlacedBy(command.buyerId)) throw OrderForbiddenException()
-        return Result(order.id, order.shopItemId, order.quantity.value, order.totalPrice.value)
+        return Result(
+            orderId = order.id,
+            shopItemId = order.shopItemId,
+            quantity = order.quantity.value,
+            totalPrice = order.totalPrice.value,
+        )
     }
 
     data class Command(

@@ -10,10 +10,11 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver
 import ywcheong.commerce.seller.domain.SellerId
-import ywcheong.commerce.seller.domain.SellerRepository
+import ywcheong.commerce.seller.domain.SellerNotFoundException
+import ywcheong.commerce.seller.usecase.GetSeller
 
 class CurrentSellerArgumentResolver(
-    private val sellerRepository: SellerRepository,
+    private val getSeller: GetSeller,
 ) : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean =
         parameter.hasParameterAnnotation(CurrentSeller::class.java) && parameter.parameterType == SellerId::class.java
@@ -25,13 +26,14 @@ class CurrentSellerArgumentResolver(
         binderFactory: WebDataBinderFactory?,
     ): SellerId {
         val identityId = CurrentIdentityArgumentResolver.resolveIdentityId(webRequest)
-        val seller =
-            sellerRepository.findByIdentityId(identityId)
-                ?: throw ErrorResponseException(
-                    HttpStatus.FORBIDDEN,
-                    ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "판매자 등록이 필요합니다."),
-                    null,
-                )
-        return seller.id
+        return try {
+            getSeller.execute(GetSeller.Command.ByIdentityId(identityId)).sellerId
+        } catch (_: SellerNotFoundException) {
+            throw ErrorResponseException(
+                HttpStatus.FORBIDDEN,
+                ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "판매자 등록이 필요합니다."),
+                null,
+            )
+        }
     }
 }

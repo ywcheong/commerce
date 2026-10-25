@@ -27,7 +27,7 @@ class BuyerController(
     fun getMyBuyer(
         @CurrentBuyer buyerId: BuyerId,
     ): BuyerResponse {
-        val result = getBuyer.execute(GetBuyer.Command(buyerId))
+        val result = getBuyer.execute(GetBuyer.Command.ByBuyerId(buyerId))
         return BuyerResponse(result.buyerId.value, result.identityId.value)
     }
 

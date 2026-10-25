@@ -13,13 +13,23 @@ class GetBuyer(
     private val buyerRepository: BuyerRepository,
 ) {
     fun execute(command: Command): Result {
-        val buyer = buyerRepository.findByIdOrNull(command.buyerId) ?: throw BuyerNotFoundException()
+        val buyer =
+            when (command) {
+                is Command.ByBuyerId -> buyerRepository.findByIdOrNull(command.buyerId)
+                is Command.ByIdentityId -> buyerRepository.findByIdentityId(command.identityId)
+            } ?: throw BuyerNotFoundException()
         return Result(buyer.id, buyer.identityId)
     }
 
-    data class Command(
-        val buyerId: BuyerId,
-    )
+    sealed interface Command {
+        data class ByBuyerId(
+            val buyerId: BuyerId,
+        ) : Command
+
+        data class ByIdentityId(
+            val identityId: IdentityId,
+        ) : Command
+    }
 
     data class Result(
         val buyerId: BuyerId,

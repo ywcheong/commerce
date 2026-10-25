@@ -27,7 +27,7 @@ class SellerController(
     fun getMySeller(
         @CurrentSeller sellerId: SellerId,
     ): SellerResponse {
-        val result = getSeller.execute(GetSeller.Command(sellerId))
+        val result = getSeller.execute(GetSeller.Command.BySellerId(sellerId))
         return SellerResponse(result.sellerId.value, result.identityId.value)
     }
 

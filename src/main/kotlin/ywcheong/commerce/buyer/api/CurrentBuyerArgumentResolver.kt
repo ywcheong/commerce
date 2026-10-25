@@ -9,11 +9,12 @@ import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 import ywcheong.commerce.buyer.domain.BuyerId
-import ywcheong.commerce.buyer.domain.BuyerRepository
+import ywcheong.commerce.buyer.domain.BuyerNotFoundException
+import ywcheong.commerce.buyer.usecase.GetBuyer
 import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver
 
 class CurrentBuyerArgumentResolver(
-    private val buyerRepository: BuyerRepository,
+    private val getBuyer: GetBuyer,
 ) : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean =
         parameter.hasParameterAnnotation(CurrentBuyer::class.java) && parameter.parameterType == BuyerId::class.java
@@ -25,13 +26,14 @@ class CurrentBuyerArgumentResolver(
         binderFactory: WebDataBinderFactory?,
     ): BuyerId {
         val identityId = CurrentIdentityArgumentResolver.resolveIdentityId(webRequest)
-        val buyer =
-            buyerRepository.findByIdentityId(identityId)
-                ?: throw ErrorResponseException(
-                    HttpStatus.FORBIDDEN,
-                    ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "구매자 등록이 필요합니다."),
-                    null,
-                )
-        return buyer.id
+        return try {
+            getBuyer.execute(GetBuyer.Command.ByIdentityId(identityId)).buyerId
+        } catch (_: BuyerNotFoundException) {
+            throw ErrorResponseException(
+                HttpStatus.FORBIDDEN,
+                ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "구매자 등록이 필요합니다."),
+                null,
+            )
+        }
     }
 }

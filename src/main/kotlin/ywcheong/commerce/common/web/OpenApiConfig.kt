@@ -11,17 +11,20 @@ import org.springframework.context.annotation.Configuration
 import ywcheong.commerce.common.passport.CurrentIdentity
 import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver.Companion.IDENTITY_HEADER
 import ywcheong.commerce.identity.domain.IdentityId
+import ywcheong.commerce.seller.api.CurrentSeller
+import ywcheong.commerce.seller.domain.SellerId
 import java.util.UUID
 
 @Configuration
 class OpenApiConfig {
-    private val passportAnnotations = listOf(CurrentIdentity::class.java)
+    private val passportAnnotations = listOf(CurrentIdentity::class.java, CurrentSeller::class.java)
 
     init {
         SpringDocUtils
             .getConfig()
             .addAnnotationsToIgnore(*passportAnnotations.toTypedArray())
             .replaceWithClass(IdentityId::class.java, UUID::class.java)
+            .replaceWithClass(SellerId::class.java, UUID::class.java)
     }
 
     @Bean

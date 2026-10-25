@@ -5,6 +5,7 @@
     <option name="SPRING_BOOT_MAIN_CLASS" value="ywcheong.commerce.CommerceApplication" />
     <method v="2">
       <option name="Make" enabled="true" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="TEST Deployment" run_configuration_type="docker-deploy" />
     </method>
   </configuration>
 </component>

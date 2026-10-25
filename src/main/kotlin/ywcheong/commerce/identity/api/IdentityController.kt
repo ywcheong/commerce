@@ -20,11 +20,11 @@ class IdentityController(
     private val createIdentity: CreateIdentity,
     private val deleteIdentity: DeleteIdentity,
 ) {
-    @PostMapping("/api-public/identities")
+    @PostMapping("/identities")
     @ResponseStatus(HttpStatus.CREATED)
     fun createIdentity(): IdentityResponse = IdentityResponse(createIdentity.execute().identityId.value)
 
-    @GetMapping("/api/identities/{identityId}")
+    @GetMapping("/identities/{identityId}")
     fun getIdentity(
         @CurrentIdentity currentIdentityId: IdentityId,
         @PathVariable identityId: IdentityId,
@@ -33,7 +33,7 @@ class IdentityController(
         return IdentityResponse(result.identityId.value)
     }
 
-    @DeleteMapping("/api/identities/{identityId}")
+    @DeleteMapping("/identities/{identityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteIdentity(
         @CurrentIdentity currentIdentityId: IdentityId,

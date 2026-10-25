@@ -5,8 +5,7 @@ import org.springframework.http.HttpStatusCode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.client.RestTestClient
 import org.springframework.test.web.servlet.client.returnResult
-
-private const val IDENTITY_HEADER = "X-Identity"
+import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver.Companion.IDENTITY_HEADER
 
 class IdentityControllerTestHelper(
     mockMvc: MockMvc,

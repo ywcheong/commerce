@@ -49,7 +49,7 @@ class ErrorResponseTest(
         val result =
             client
                 .get()
-                .uri("/api/identities/{identityId}", UUID.randomUUID())
+                .uri("/identities/{identityId}", UUID.randomUUID())
                 .exchange()
                 .returnResult<String>()
 
@@ -72,7 +72,7 @@ class ErrorResponseTest(
         val result =
             client
                 .get()
-                .uri("/api-public/no-such-path")
+                .uri("/no-such-path")
                 .exchange()
                 .returnResult<String>()
 

@@ -39,7 +39,7 @@ class RequestIdTest(
     @Test
     fun `인증 실패 응답도 요청 Id를 헤더로 반환한다`() {
         // when
-        val (status, requestId) = requestId("/api/identities/${UUID.randomUUID()}")
+        val (status, requestId) = requestId("/identities/${UUID.randomUUID()}")
 
         // then
         status shouldBe HttpStatus.UNAUTHORIZED

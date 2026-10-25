@@ -17,7 +17,7 @@ class IdentityControllerTestHelper(
         val result =
             client
                 .post()
-                .uri("/api-public/identities")
+                .uri("/identities")
                 .exchange()
                 .returnResult<String>()
         check(result.status.value() == 201) { "사용자 생성 실패: ${result.status}" }
@@ -31,7 +31,7 @@ class IdentityControllerTestHelper(
         val result =
             client
                 .get()
-                .uri("/api/identities/{identityId}", identityId)
+                .uri("/identities/{identityId}", identityId)
                 .headers { if (currentIdentityId != null) it.set(IDENTITY_HEADER, currentIdentityId) }
                 .exchange()
                 .returnResult<String>()
@@ -47,7 +47,7 @@ class IdentityControllerTestHelper(
         val result =
             client
                 .delete()
-                .uri("/api/identities/{identityId}", identityId)
+                .uri("/identities/{identityId}", identityId)
                 .headers { if (currentIdentityId != null) it.set(IDENTITY_HEADER, currentIdentityId) }
                 .exchange()
                 .returnResult<String>()

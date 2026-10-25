@@ -9,24 +9,29 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import ywcheong.commerce.common.passport.CurrentIdentity
 import ywcheong.commerce.identity.domain.IdentityId
-import ywcheong.commerce.identity.usecase.IdentityUsecaseCommand
-import ywcheong.commerce.identity.usecase.IdentityUsecaseQuery
+import ywcheong.commerce.identity.usecase.CreateIdentity
+import ywcheong.commerce.identity.usecase.DeleteIdentity
+import ywcheong.commerce.identity.usecase.GetIdentity
 import java.util.UUID
 
 @RestController
 class IdentityController(
-    private val identityUsecaseCommand: IdentityUsecaseCommand,
-    private val identityUsecaseQuery: IdentityUsecaseQuery,
+    private val getIdentity: GetIdentity,
+    private val createIdentity: CreateIdentity,
+    private val deleteIdentity: DeleteIdentity,
 ) {
     @PostMapping("/api-public/identities")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createIdentity(): IdentityResponse = IdentityResponse(identityUsecaseCommand.createIdentity().value)
+    fun createIdentity(): IdentityResponse = IdentityResponse(createIdentity.execute().identityId.value)
 
     @GetMapping("/api/identities/{identityId}")
-    fun findIdentity(
+    fun getIdentity(
         @CurrentIdentity currentIdentityId: IdentityId,
         @PathVariable identityId: IdentityId,
-    ): IdentityResponse = IdentityResponse(identityUsecaseQuery.findIdentity(currentIdentityId, identityId).id.value)
+    ): IdentityResponse {
+        val result = getIdentity.execute(GetIdentity.Command(currentIdentityId, identityId))
+        return IdentityResponse(result.identityId.value)
+    }
 
     @DeleteMapping("/api/identities/{identityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -34,7 +39,7 @@ class IdentityController(
         @CurrentIdentity currentIdentityId: IdentityId,
         @PathVariable identityId: IdentityId,
     ) {
-        identityUsecaseCommand.deleteIdentity(currentIdentityId, identityId)
+        deleteIdentity.execute(DeleteIdentity.Command(currentIdentityId, identityId))
     }
 
     data class IdentityResponse(

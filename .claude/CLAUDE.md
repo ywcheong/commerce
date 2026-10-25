@@ -10,7 +10,7 @@ KISS 원칙에 따라 코드와 문서를 작성한다.
 - 최종 결과만을 남겨야 하며, 명시적으로 요청받은 경우를 제외하면 히스토리를 작성하지 않는다.
   - 예: "A 기술은 B 문제가 있어 사용하지 않도록 변경하였다" -> 삭제 (최종 상태가 아님)
 - 어떻게 구현되었는지 생산자 관점에서 설명하지 말고, 그래서 무엇을 알아야 하는지 소비자 관점에서 기록한다.
-  - 예: "@CurrentUser는 PassportFilter에서 X-User-Id를 주입받아 UserId로 변환한다" -> "@CurrentUser로 컨트롤러에서 UserId를 주입받을 수 있다"
+  - 예: "@CurrentIdentity는 PassportFilter에서 X-Identity를 주입받아 IdentityId로 변환한다" -> "@CurrentIdentity로 컨트롤러에서 IdentityId를 주입받을 수 있다"
 
 # 구현
 
@@ -26,7 +26,7 @@ runCatching은 Error까지 잡으므로 사용하지 않는다. 예외 처리는
 모든 Entity의 Id는 UUIDv7 값을 가진 @Embeddable data class로 정의한다.
 
 API 경로 접두사로 접근권한을 관리한다.
-- /api: 사용자 식별 필수. 현재 사용자는 컨트롤러에서 `@CurrentUser userId: UserId`로 주입받을 수 있다.
+- /api: 사용자 식별 필수. 현재 사용자는 컨트롤러에서 `@CurrentIdentity identityId: IdentityId`로 주입받을 수 있다.
 - /api-public: 사용자 식별 불필요.
 - /internal: 외부 진입 차단
 

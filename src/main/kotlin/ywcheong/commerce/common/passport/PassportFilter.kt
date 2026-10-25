@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.ErrorResponseException
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.servlet.HandlerExceptionResolver
-import ywcheong.commerce.user.domain.UserId
+import ywcheong.commerce.identity.domain.IdentityId
 
 @Component
 class PassportFilter(
@@ -23,19 +23,19 @@ class PassportFilter(
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
-        val header = request.getHeader(USER_ID_HEADER)
+        val header = request.getHeader(IDENTITY_HEADER)
         if (header == null) {
             handlerExceptionResolver.resolveException(request, response, null, unauthenticated())
             return
         }
-        val userId =
+        val identityId =
             try {
-                UserId(header)
+                IdentityId(header)
             } catch (_: IllegalArgumentException) {
                 handlerExceptionResolver.resolveException(request, response, null, unauthenticated())
                 return
             }
-        request.setAttribute(CURRENT_USER_ATTRIBUTE, userId)
+        request.setAttribute(CURRENT_IDENTITY_ATTRIBUTE, identityId)
         filterChain.doFilter(request, response)
     }
 
@@ -47,7 +47,7 @@ class PassportFilter(
         )
 
     companion object {
-        const val USER_ID_HEADER = "X-User-Id"
-        const val CURRENT_USER_ATTRIBUTE = "currentUser"
+        const val IDENTITY_HEADER = "X-Identity"
+        const val CURRENT_IDENTITY_ATTRIBUTE = "currentIdentity"
     }
 }

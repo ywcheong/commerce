@@ -8,6 +8,8 @@ import ywcheong.commerce.identity.domain.IdentityRepository
 import ywcheong.commerce.identity.infra.FakeIdentityRepository
 import ywcheong.commerce.seller.domain.SellerRepository
 import ywcheong.commerce.seller.infra.FakeSellerRepository
+import ywcheong.commerce.shopitem.domain.ShopItemRepository
+import ywcheong.commerce.shopitem.infra.FakeShopItemRepository
 
 @TestConfiguration
 class TestSetupBeans {
@@ -19,4 +21,7 @@ class TestSetupBeans {
 
     @Bean
     fun sellerRepository(): SellerRepository = FakeSellerRepository()
+
+    @Bean
+    fun shopItemRepository(): ShopItemRepository = FakeShopItemRepository()
 }

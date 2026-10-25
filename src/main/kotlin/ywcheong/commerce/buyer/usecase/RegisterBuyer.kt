@@ -19,7 +19,7 @@ class RegisterBuyer(
     fun execute(command: Command): Result {
         identityRepository.findByIdOrNull(command.identityId) ?: throw IdentityNotFoundException()
         if (buyerRepository.findByIdentityId(command.identityId) != null) throw BuyerAlreadyRegisteredException()
-        return Result(buyerRepository.save(Buyer.register(command.identityId)).id)
+        return Result(buyerRepository.save(Buyer(BuyerId.generate(), command.identityId)).id)
     }
 
     data class Command(

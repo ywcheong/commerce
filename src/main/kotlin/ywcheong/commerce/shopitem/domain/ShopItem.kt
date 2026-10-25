@@ -48,13 +48,4 @@ class ShopItem(
         if (stock < quantity) throw OutOfStockException()
         stock -= quantity
     }
-
-    companion object {
-        fun register(
-            sellerId: SellerId,
-            name: ShopItemName,
-            price: Money,
-            stock: Quantity,
-        ): ShopItem = ShopItem(ShopItemId.generate(), sellerId, name, price, stock)
-    }
 }

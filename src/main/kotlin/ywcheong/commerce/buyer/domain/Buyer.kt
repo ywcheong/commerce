@@ -23,8 +23,4 @@ class Buyer(
     @AttributeOverride(name = "value", column = Column(name = "identity_id"))
     var identityId: IdentityId = identityId
         protected set
-
-    companion object {
-        fun register(identityId: IdentityId): Buyer = Buyer(BuyerId.generate(), identityId)
-    }
 }

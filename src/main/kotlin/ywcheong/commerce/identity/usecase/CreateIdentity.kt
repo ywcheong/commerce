@@ -11,7 +11,7 @@ import ywcheong.commerce.identity.domain.IdentityRepository
 class CreateIdentity(
     private val identityRepository: IdentityRepository,
 ) {
-    fun execute(): Result = Result(identityRepository.save(Identity.create()).id)
+    fun execute(): Result = Result(identityRepository.save(Identity(IdentityId.generate())).id)
 
     data class Result(
         val identityId: IdentityId,

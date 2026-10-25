@@ -16,7 +16,7 @@ class RegisterShopItem(
     private val shopItemRepository: ShopItemRepository,
 ) {
     fun execute(command: Command): Result {
-        val shopItem = ShopItem.register(command.sellerId, command.name, command.price, command.stock)
+        val shopItem = ShopItem(ShopItemId.generate(), command.sellerId, command.name, command.price, command.stock)
         return Result(shopItemRepository.save(shopItem).id)
     }
 

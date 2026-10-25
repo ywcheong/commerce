@@ -15,8 +15,4 @@ class Identity(
     @AttributeOverride(name = "value", column = Column(name = "id"))
     var id: IdentityId = id
         protected set
-
-    companion object {
-        fun create(): Identity = Identity(IdentityId.generate())
-    }
 }

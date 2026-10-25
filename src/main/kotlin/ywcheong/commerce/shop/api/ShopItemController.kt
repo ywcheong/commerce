@@ -24,7 +24,7 @@ class ShopItemController(
     private val getShopItem: GetShopItem,
     private val getShopItems: GetShopItems,
 ) {
-    @PostMapping("/shop-items")
+    @PostMapping("/shops/items")
     @ResponseStatus(HttpStatus.CREATED)
     fun registerShopItem(
         @CurrentSeller sellerId: SellerId,
@@ -41,7 +41,7 @@ class ShopItemController(
         return RegisterShopItemResponse(shopItemId = registerResult.shopItemId.value)
     }
 
-    @GetMapping("/shop-items")
+    @GetMapping("/shops/items")
     fun getShopItems(): List<ShopItemResponse> {
         val getResult = getShopItems.execute()
         return getResult.items.map {
@@ -55,7 +55,7 @@ class ShopItemController(
         }
     }
 
-    @GetMapping("/shop-items/{shopItemId}")
+    @GetMapping("/shops/items/{shopItemId}")
     fun getShopItem(
         @PathVariable shopItemId: ShopItemId,
     ): ShopItemResponse {

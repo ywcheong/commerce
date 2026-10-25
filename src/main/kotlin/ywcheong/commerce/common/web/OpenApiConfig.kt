@@ -15,6 +15,7 @@ import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver.Compani
 import ywcheong.commerce.identity.domain.IdentityId
 import ywcheong.commerce.seller.api.CurrentSeller
 import ywcheong.commerce.seller.domain.SellerId
+import ywcheong.commerce.shopitem.domain.ShopItemId
 import java.util.UUID
 
 @Configuration
@@ -28,6 +29,7 @@ class OpenApiConfig {
             .replaceWithClass(IdentityId::class.java, UUID::class.java)
             .replaceWithClass(BuyerId::class.java, UUID::class.java)
             .replaceWithClass(SellerId::class.java, UUID::class.java)
+            .replaceWithClass(ShopItemId::class.java, UUID::class.java)
     }
 
     @Bean

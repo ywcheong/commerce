@@ -1,13 +1,14 @@
 package ywcheong.commerce.buyer.domain
 
 import jakarta.persistence.Embeddable
+import ywcheong.commerce.common.id.EntityId
 import ywcheong.commerce.common.id.UuidV7
 import java.util.UUID
 
 @Embeddable
 data class BuyerId(
-    val value: UUID,
-) {
+    override val value: UUID,
+) : EntityId {
     constructor(value: String) : this(UUID.fromString(value))
 
     companion object {

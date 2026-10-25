@@ -1,37 +1,24 @@
 package ywcheong.commerce.common.web
 
+import io.swagger.v3.core.converter.ModelConverter
+import io.swagger.v3.core.util.Json
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.media.UUIDSchema
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springdoc.core.customizers.OperationCustomizer
 import org.springdoc.core.utils.SpringDocUtils
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import ywcheong.commerce.buyer.api.CurrentBuyer
-import ywcheong.commerce.buyer.domain.BuyerId
-import ywcheong.commerce.common.passport.CurrentIdentity
+import ywcheong.commerce.common.id.EntityId
 import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver.Companion.IDENTITY_HEADER
-import ywcheong.commerce.identity.domain.IdentityId
-import ywcheong.commerce.order.domain.OrderId
-import ywcheong.commerce.seller.api.CurrentSeller
-import ywcheong.commerce.seller.domain.SellerId
-import ywcheong.commerce.shopitem.domain.ShopItemId
-import java.util.UUID
+import ywcheong.commerce.common.passport.Passport
 
 @Configuration
 class OpenApiConfig {
-    private val passportAnnotations = listOf(CurrentIdentity::class.java, CurrentBuyer::class.java, CurrentSeller::class.java)
-
     init {
-        SpringDocUtils
-            .getConfig()
-            .addAnnotationsToIgnore(*passportAnnotations.toTypedArray())
-            .replaceWithClass(IdentityId::class.java, UUID::class.java)
-            .replaceWithClass(BuyerId::class.java, UUID::class.java)
-            .replaceWithClass(SellerId::class.java, UUID::class.java)
-            .replaceWithClass(ShopItemId::class.java, UUID::class.java)
-            .replaceWithClass(OrderId::class.java, UUID::class.java)
+        SpringDocUtils.getConfig().addAnnotationsToIgnore(Passport::class.java)
     }
 
     @Bean
@@ -47,11 +34,23 @@ class OpenApiConfig {
         )
 
     @Bean
+    fun entityIdModelConverter(): ModelConverter =
+        ModelConverter { type, context, chain ->
+            if (EntityId::class.java.isAssignableFrom(Json.mapper().constructType(type.type).rawClass)) {
+                UUIDSchema()
+            } else if (chain.hasNext()) {
+                chain.next().resolve(type, context, chain)
+            } else {
+                null
+            }
+        }
+
+    @Bean
     fun identitySecurityCustomizer(): OperationCustomizer =
         OperationCustomizer { operation, handlerMethod ->
             val requiresIdentity =
                 handlerMethod.methodParameters.any { parameter ->
-                    passportAnnotations.any { parameter.hasParameterAnnotation(it) }
+                    parameter.parameterAnnotations.any { it.annotationClass.java.isAnnotationPresent(Passport::class.java) }
                 }
             if (requiresIdentity) operation.addSecurityItem(SecurityRequirement().addList(IDENTITY_HEADER))
             operation

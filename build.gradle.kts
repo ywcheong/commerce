@@ -72,6 +72,10 @@ detekt {
     config.setFrom("detekt.yml")
 }
 
+tasks.check {
+    dependsOn("detektMain", "detektTest")
+}
+
 configurations.matching { it.name == "detekt" }.configureEach {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.jetbrains.kotlin") {

@@ -6,3 +6,7 @@ style:
     ignoreAnnotated: ['RestController']
   MaxLineLength:
     maxLineLength: 140
+complexity:
+  NamedArguments:
+    active: true
+    allowedArguments: 1

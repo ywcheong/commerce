@@ -9,7 +9,7 @@ import jakarta.persistence.Table
 import ywcheong.commerce.buyer.domain.BuyerId
 import ywcheong.commerce.common.domain.Money
 import ywcheong.commerce.common.domain.Quantity
-import ywcheong.commerce.shopitem.domain.ShopItemId
+import ywcheong.commerce.shop.domain.ShopItemId
 
 @Entity
 @Table(name = "orders")

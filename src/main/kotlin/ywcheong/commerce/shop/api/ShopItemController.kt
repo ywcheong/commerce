@@ -1,4 +1,4 @@
-package ywcheong.commerce.shopitem.api
+package ywcheong.commerce.shop.api
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,11 +11,11 @@ import ywcheong.commerce.common.domain.Money
 import ywcheong.commerce.common.domain.Quantity
 import ywcheong.commerce.seller.api.CurrentSeller
 import ywcheong.commerce.seller.domain.SellerId
-import ywcheong.commerce.shopitem.domain.ShopItemId
-import ywcheong.commerce.shopitem.domain.ShopItemName
-import ywcheong.commerce.shopitem.usecase.GetShopItem
-import ywcheong.commerce.shopitem.usecase.GetShopItems
-import ywcheong.commerce.shopitem.usecase.RegisterShopItem
+import ywcheong.commerce.shop.domain.ShopItemId
+import ywcheong.commerce.shop.domain.ShopItemName
+import ywcheong.commerce.shop.usecase.GetShopItem
+import ywcheong.commerce.shop.usecase.GetShopItems
+import ywcheong.commerce.shop.usecase.RegisterShopItem
 import java.util.UUID
 
 @RestController

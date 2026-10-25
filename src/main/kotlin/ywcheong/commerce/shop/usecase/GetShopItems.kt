@@ -1,10 +1,10 @@
-package ywcheong.commerce.shopitem.usecase
+package ywcheong.commerce.shop.usecase
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ywcheong.commerce.seller.domain.SellerId
-import ywcheong.commerce.shopitem.domain.ShopItemId
-import ywcheong.commerce.shopitem.domain.ShopItemRepository
+import ywcheong.commerce.shop.domain.ShopItemId
+import ywcheong.commerce.shop.domain.ShopItemRepository
 
 @Service
 @Transactional(readOnly = true)

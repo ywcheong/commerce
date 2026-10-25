@@ -13,7 +13,7 @@ import ywcheong.commerce.common.domain.Quantity
 import ywcheong.commerce.order.domain.OrderId
 import ywcheong.commerce.order.usecase.GetOrder
 import ywcheong.commerce.order.usecase.PlaceOrder
-import ywcheong.commerce.shopitem.domain.ShopItemId
+import ywcheong.commerce.shop.domain.ShopItemId
 import java.util.UUID
 
 @RestController

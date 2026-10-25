@@ -10,8 +10,8 @@ import ywcheong.commerce.order.domain.OrderRepository
 import ywcheong.commerce.order.infra.FakeOrderRepository
 import ywcheong.commerce.seller.domain.SellerRepository
 import ywcheong.commerce.seller.infra.FakeSellerRepository
-import ywcheong.commerce.shopitem.domain.ShopItemRepository
-import ywcheong.commerce.shopitem.infra.FakeShopItemRepository
+import ywcheong.commerce.shop.domain.ShopItemRepository
+import ywcheong.commerce.shop.infra.FakeShopItemRepository
 
 @TestConfiguration
 class TestSetupBeans {

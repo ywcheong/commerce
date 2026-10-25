@@ -8,7 +8,7 @@ import ywcheong.commerce.TestSetup
 import ywcheong.commerce.buyer.api.BuyerControllerTestHelper
 import ywcheong.commerce.identity.api.IdentityControllerTestHelper
 import ywcheong.commerce.seller.api.SellerControllerTestHelper
-import ywcheong.commerce.shopitem.api.ShopItemControllerTestHelper
+import ywcheong.commerce.shop.api.ShopItemControllerTestHelper
 import java.util.UUID
 
 @TestSetup

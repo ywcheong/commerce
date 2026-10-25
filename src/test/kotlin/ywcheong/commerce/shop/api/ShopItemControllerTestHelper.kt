@@ -1,4 +1,4 @@
-package ywcheong.commerce.shopitem.api
+package ywcheong.commerce.shop.api
 
 import com.jayway.jsonpath.JsonPath
 import org.springframework.http.HttpStatusCode

@@ -1,4 +1,4 @@
-package ywcheong.commerce.shopitem.domain
+package ywcheong.commerce.shop.domain
 
 interface ShopItemRepository {
     fun save(shopItem: ShopItem): ShopItem

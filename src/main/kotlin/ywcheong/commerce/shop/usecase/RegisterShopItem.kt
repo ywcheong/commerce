@@ -1,14 +1,14 @@
-package ywcheong.commerce.shopitem.usecase
+package ywcheong.commerce.shop.usecase
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ywcheong.commerce.common.domain.Money
 import ywcheong.commerce.common.domain.Quantity
 import ywcheong.commerce.seller.domain.SellerId
-import ywcheong.commerce.shopitem.domain.ShopItem
-import ywcheong.commerce.shopitem.domain.ShopItemId
-import ywcheong.commerce.shopitem.domain.ShopItemName
-import ywcheong.commerce.shopitem.domain.ShopItemRepository
+import ywcheong.commerce.shop.domain.ShopItem
+import ywcheong.commerce.shop.domain.ShopItemId
+import ywcheong.commerce.shop.domain.ShopItemName
+import ywcheong.commerce.shop.domain.ShopItemRepository
 
 @Service
 @Transactional

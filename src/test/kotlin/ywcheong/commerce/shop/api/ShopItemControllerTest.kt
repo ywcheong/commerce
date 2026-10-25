@@ -1,4 +1,4 @@
-package ywcheong.commerce.shopitem.api
+package ywcheong.commerce.shop.api
 
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe

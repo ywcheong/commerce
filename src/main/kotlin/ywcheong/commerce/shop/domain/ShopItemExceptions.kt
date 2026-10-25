@@ -1,4 +1,4 @@
-package ywcheong.commerce.shopitem.domain
+package ywcheong.commerce.shop.domain
 
 import ywcheong.commerce.common.error.BusinessException
 

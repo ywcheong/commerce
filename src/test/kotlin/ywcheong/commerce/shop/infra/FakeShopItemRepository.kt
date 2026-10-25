@@ -1,8 +1,8 @@
-package ywcheong.commerce.shopitem.infra
+package ywcheong.commerce.shop.infra
 
-import ywcheong.commerce.shopitem.domain.ShopItem
-import ywcheong.commerce.shopitem.domain.ShopItemId
-import ywcheong.commerce.shopitem.domain.ShopItemRepository
+import ywcheong.commerce.shop.domain.ShopItem
+import ywcheong.commerce.shop.domain.ShopItemId
+import ywcheong.commerce.shop.domain.ShopItemRepository
 import java.util.concurrent.ConcurrentHashMap
 
 class FakeShopItemRepository : ShopItemRepository {

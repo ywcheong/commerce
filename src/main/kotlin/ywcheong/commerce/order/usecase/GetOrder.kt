@@ -7,7 +7,7 @@ import ywcheong.commerce.order.domain.OrderForbiddenException
 import ywcheong.commerce.order.domain.OrderId
 import ywcheong.commerce.order.domain.OrderNotFoundException
 import ywcheong.commerce.order.domain.OrderRepository
-import ywcheong.commerce.shopitem.domain.ShopItemId
+import ywcheong.commerce.shop.domain.ShopItemId
 
 @Service
 @Transactional(readOnly = true)

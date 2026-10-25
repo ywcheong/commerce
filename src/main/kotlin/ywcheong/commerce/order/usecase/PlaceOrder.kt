@@ -7,9 +7,9 @@ import ywcheong.commerce.common.domain.Quantity
 import ywcheong.commerce.order.domain.Order
 import ywcheong.commerce.order.domain.OrderId
 import ywcheong.commerce.order.domain.OrderRepository
-import ywcheong.commerce.shopitem.domain.ShopItemId
-import ywcheong.commerce.shopitem.domain.ShopItemNotFoundException
-import ywcheong.commerce.shopitem.domain.ShopItemRepository
+import ywcheong.commerce.shop.domain.ShopItemId
+import ywcheong.commerce.shop.domain.ShopItemNotFoundException
+import ywcheong.commerce.shop.domain.ShopItemRepository
 
 @Service
 @Transactional

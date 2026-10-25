@@ -8,6 +8,8 @@ import org.springdoc.core.customizers.OperationCustomizer
 import org.springdoc.core.utils.SpringDocUtils
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import ywcheong.commerce.buyer.api.CurrentBuyer
+import ywcheong.commerce.buyer.domain.BuyerId
 import ywcheong.commerce.common.passport.CurrentIdentity
 import ywcheong.commerce.common.passport.CurrentIdentityArgumentResolver.Companion.IDENTITY_HEADER
 import ywcheong.commerce.identity.domain.IdentityId
@@ -17,13 +19,14 @@ import java.util.UUID
 
 @Configuration
 class OpenApiConfig {
-    private val passportAnnotations = listOf(CurrentIdentity::class.java, CurrentSeller::class.java)
+    private val passportAnnotations = listOf(CurrentIdentity::class.java, CurrentBuyer::class.java, CurrentSeller::class.java)
 
     init {
         SpringDocUtils
             .getConfig()
             .addAnnotationsToIgnore(*passportAnnotations.toTypedArray())
             .replaceWithClass(IdentityId::class.java, UUID::class.java)
+            .replaceWithClass(BuyerId::class.java, UUID::class.java)
             .replaceWithClass(SellerId::class.java, UUID::class.java)
     }
 

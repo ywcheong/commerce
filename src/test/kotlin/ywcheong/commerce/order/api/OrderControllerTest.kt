@@ -37,13 +37,19 @@ class OrderControllerTest(
     }
 
     @Test
-    fun `구매자는 상품을 주문하고 본인 주문을 조회할 수 있다`() {
+    fun `구매자는 여러 상품을 한 번에 주문하고 본인 주문을 조회할 수 있다`() {
         // given
-        val shopItemId = createShopItem(price = 3_000)
+        val firstShopItemId = createShopItem(price = 3_000)
+        val secondShopItemId = createShopItem(price = 5_000)
         val buyer = createBuyer()
 
         // when
-        val orderId = helper.placeOrder(identityId = buyer, shopItemId = shopItemId, quantity = 2).orderId!!
+        val orderId =
+            helper
+                .placeOrder(
+                    identityId = buyer,
+                    items = listOf(firstShopItemId to 2, secondShopItemId to 1),
+                ).orderId!!
 
         // then
         val result = helper.findOrder(identityId = buyer, orderId = orderId)
@@ -51,23 +57,28 @@ class OrderControllerTest(
         result.body shouldBe
             mapOf(
                 "orderId" to orderId,
-                "shopItemId" to shopItemId,
-                "quantity" to 2,
-                "totalPrice" to 6_000,
+                "totalPrice" to 11_000,
+                "items" to
+                    listOf(
+                        mapOf("shopItemId" to firstShopItemId, "quantity" to 2, "unitPrice" to 3_000),
+                        mapOf("shopItemId" to secondShopItemId, "quantity" to 1, "unitPrice" to 5_000),
+                    ),
             )
     }
 
     @Test
-    fun `주문하면 상품 재고가 주문 수량만큼 줄어든다`() {
+    fun `주문하면 상품별 재고가 주문 수량만큼 줄어든다`() {
         // given
-        val shopItemId = createShopItem(stock = 10)
+        val firstShopItemId = createShopItem(stock = 10)
+        val secondShopItemId = createShopItem(stock = 5)
         val buyer = createBuyer()
 
         // when
-        helper.placeOrder(identityId = buyer, shopItemId = shopItemId, quantity = 3)
+        helper.placeOrder(identityId = buyer, items = listOf(firstShopItemId to 3, secondShopItemId to 2))
 
         // then
-        shopItemHelper.findShopItem(shopItemId).body!!["stock"] shouldBe 7
+        shopItemHelper.findShopItem(firstShopItemId).body!!["stock"] shouldBe 7
+        shopItemHelper.findShopItem(secondShopItemId).body!!["stock"] shouldBe 3
     }
 
     @Test
@@ -77,7 +88,7 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        val result = helper.placeOrder(identityId = buyer, shopItemId = shopItemId, quantity = 2)
+        val result = helper.placeOrder(identityId = buyer, items = listOf(shopItemId to 2))
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -92,11 +103,38 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        val result = helper.placeOrder(identityId = buyer, shopItemId = shopItemId, quantity = 0)
+        val result = helper.placeOrder(identityId = buyer, items = listOf(shopItemId to 0))
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
         result.code shouldBe "INVALID_ORDER_QUANTITY"
+    }
+
+    @Test
+    fun `상품 없이 주문할 수 없다`() {
+        // given
+        val buyer = createBuyer()
+
+        // when
+        val result = helper.placeOrder(identityId = buyer, items = emptyList())
+
+        // then
+        result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
+        result.code shouldBe "EMPTY_ORDER"
+    }
+
+    @Test
+    fun `같은 상품을 중복으로 담아 주문할 수 없다`() {
+        // given
+        val shopItemId = createShopItem()
+        val buyer = createBuyer()
+
+        // when
+        val result = helper.placeOrder(identityId = buyer, items = listOf(shopItemId to 1, shopItemId to 2))
+
+        // then
+        result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
+        result.code shouldBe "DUPLICATE_ORDER_ITEM"
     }
 
     @Test
@@ -105,7 +143,7 @@ class OrderControllerTest(
         val buyer = createBuyer()
 
         // when
-        val result = helper.placeOrder(identityId = buyer, shopItemId = UUID.randomUUID().toString(), quantity = 1)
+        val result = helper.placeOrder(identityId = buyer, items = listOf(UUID.randomUUID().toString() to 1))
 
         // then
         result.status shouldBe HttpStatus.UNPROCESSABLE_CONTENT
@@ -119,7 +157,7 @@ class OrderControllerTest(
         val identityId = identityHelper.createIdentity()
 
         // when
-        val result = helper.placeOrder(identityId = identityId, shopItemId = shopItemId, quantity = 1)
+        val result = helper.placeOrder(identityId = identityId, items = listOf(shopItemId to 1))
 
         // then
         result.status shouldBe HttpStatus.FORBIDDEN
@@ -130,7 +168,7 @@ class OrderControllerTest(
     fun `다른 구매자의 주문은 조회할 수 없다`() {
         // given
         val shopItemId = createShopItem()
-        val orderId = helper.placeOrder(identityId = createBuyer(), shopItemId = shopItemId, quantity = 1).orderId!!
+        val orderId = helper.placeOrder(identityId = createBuyer(), items = listOf(shopItemId to 1)).orderId!!
         val otherBuyer = createBuyer()
 
         // when

@@ -16,8 +16,7 @@ class OrderControllerTestHelper(
 
     fun placeOrder(
         identityId: String,
-        shopItemId: String,
-        quantity: Int,
+        items: List<Pair<String, Int>>,
     ): OrderResult {
         val result =
             client
@@ -25,7 +24,7 @@ class OrderControllerTestHelper(
                 .uri("/orders")
                 .header(IDENTITY_HEADER, identityId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(mapOf("shopItemId" to shopItemId, "quantity" to quantity))
+                .body(mapOf("items" to items.map { (shopItemId, quantity) -> mapOf("shopItemId" to shopItemId, "quantity" to quantity) }))
                 .exchange()
                 .returnResult<String>()
         val orderId: String? = if (result.status.is2xxSuccessful) JsonPath.read(result.responseBody, "\$.orderId") else null
